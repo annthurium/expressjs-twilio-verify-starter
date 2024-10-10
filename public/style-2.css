@@ -1,7 +1,7 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: roboto, verdana;
+    font-family: 'The Halloween', sans-serif;
     
 }
 *:focus {
@@ -24,7 +24,13 @@ form {
 .signup-container {
     border: 1px solid gray;
     height: ;
-    background: linear-gradient(45deg, pink, lightblue);
+    background: linear-gradient(
+        to bottom right,
+        #ff6600,  /* Bright orange */
+        #ff9900,  /* Pumpkin orange */
+        #330066,  /* Deep purple */
+        #000000   /* Black */
+      );
     padding: 20px 10px;
     box-shadow: 10px 10px 10px #555;
     animation:;
@@ -46,11 +52,13 @@ form {
 .signup-form {
     padding: 0;
     margin-bottom: 10px;
-    font-family: Comic Sans;
 }
 .signup-form p {
     text-align: center;
-    
+}
+
+.login-redirect-text, a {
+    font-family: Monaco;
 }
 
 .signup-form i {
@@ -68,7 +76,8 @@ form {
     margin: 5px;
     padding: 10px 7px;
     border: 1px solid gray;
-    font-size: 1rem;    
+    font-size: 1rem;
+    font-family: Monaco;
     background: transparent;
     display: inline-block;
 }
@@ -80,7 +89,7 @@ form {
     padding: 5px 5px;
     margin: 15px 15px 0px 15px;
     width: 10em;
-    background: linear-gradient(40deg, lightblue, pink);
+    background: linear-gradient(40deg, orange, red);
     border: 1px solid gray;
     border-radius: 5px;
     font-size: 1.2rem;
@@ -88,6 +97,6 @@ form {
     box-shadow: 5px 5px 20px gray;
 }
 .submit-button:hover {
-    background: linear-gradient(30deg, blue, red);
+    background: linear-gradient(30deg, black, red);
     color: white;
 }
