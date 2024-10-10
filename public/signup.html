@@ -4,17 +4,17 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-        <div class="outer">
+        <div class="signup-container">
             <h1>Pizza Rat's Costume Emporium</h1>
             <h4>Sign up to get discounts and more</h4>
-            <div class="inner">
+            <div class="signup-form">
                 <form action="/login" method="post">
                 
-                <input class="in" type="email" placeholder="pepperoni@subway.party"/>
-                <input class="in" type="password" placeholder="Type your Password"/>
-                <input class="in" type="phone number" placeholder="(212) 123-4567"/>
-                <p class="loginRedirectText">Already have an account? <a href="#">Log in here.</a></p>
-                <p><input class="btn" type="submit" value="Submit"/></p>
+                <input class="form-input" type="email" name="email" required="true" placeholder="pepperoni@subway.party"/>
+                <input class="form-input" type="password" name="password" required="true" placeholder="Type your Password"/>
+                <input class="form-input" type="tel" name="phone" placeholder="(212) 123-4567"/>
+                <p class="login-redirect-text">Already have an account? <a href="#">Log in here.</a></p>
+                <p><button class="submit-button" type="submit" value="Submit"/>Submit</p>
             </form>
             </div>
         </div>

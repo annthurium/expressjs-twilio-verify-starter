@@ -21,7 +21,7 @@ form {
     flex-direction: column;
 }
 
-.outer {
+.signup-container {
     border: 1px solid gray;
     height: ;
     background: linear-gradient(45deg, pink, lightblue);
@@ -29,31 +29,31 @@ form {
     box-shadow: 10px 10px 10px #555;
     animation:;
 }
-.outer h1, h4 {
+.signup-container h1, h4 {
     text-align: center;
     color: #333;
     font-family: Monaco;
     margin: 10px;
     
 }
-.outer h1 {
+.signup-container h1 {
     background: linear-gradient(30deg, blue, red);
     -webkit-background-clip:text;
     color: transparent;
     font-weight: 800;
     font-family: inherit;
 }
-.inner {
+.signup-form {
     padding: 0;
     margin-bottom: 10px;
     font-family: Comic Sans;
 }
-.inner p {
+.signup-form p {
     text-align: center;
     
 }
 
-.inner i {
+.signup-form i {
     color: black;
     opacity: .6;
     line-height: 1.5rem;
@@ -64,7 +64,7 @@ form {
     border: 1px solid transparent;
     box-shadow: 5px 5px 20px gray;
 }
-.in {
+.form-input {
     margin: 5px;
     padding: 10px 7px;
     border: 1px solid gray;
@@ -72,11 +72,11 @@ form {
     background: transparent;
     display: inline-block;
 }
-.in:focus {
+.form-input:focus {
     border: 1px solid pink;
     box-shadow: 5px 5px 20px hotpink;
 }
-.btn {
+.submit-button {
     padding: 5px 5px;
     margin: 15px 15px 0px 15px;
     width: 10em;
@@ -87,7 +87,7 @@ form {
     transition: .5s 0s ease-out;
     box-shadow: 5px 5px 20px gray;
 }
-.btn:hover {
+.submit-button:hover {
     background: linear-gradient(30deg, blue, red);
     color: white;
 }
