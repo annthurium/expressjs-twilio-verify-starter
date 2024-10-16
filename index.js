@@ -27,10 +27,6 @@ async function createSMSVerification(phoneNumber) {
 app.use(serveStatic(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
 
 async function formatPhoneNumber(phoneNumber) {
