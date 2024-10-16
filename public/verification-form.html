@@ -21,8 +21,6 @@
                         if (phone) {
                             document.getElementById('phoneNumber').value = phone;
                         }
-                        const form = document.getElementById('verificationForm');
-                        form.action = `/submit-verification-code?phone=${encodeURIComponent(phone)}`;
                     });
                 </script>
             </form>

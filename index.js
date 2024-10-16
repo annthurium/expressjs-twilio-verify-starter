@@ -21,7 +21,7 @@ async function createSMSVerification(phoneNumber) {
       to: phoneNumber,
     });
 
-  console.log(verification.sid);
+  console.log("Twilio verification created:", verification.sid);
 }
 
 app.use(serveStatic(path.join(__dirname, "public")));
@@ -31,21 +31,20 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// Initialize the LaunchDarkly client
 const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
 
 app.post("/verify", async (req, res) => {
-  const phoneNumber = req.body.phone;
-  console.log("!!!! phoneNumber", phoneNumber);
+  const phoneNumber = req.body["phone"];
   await createSMSVerification(phoneNumber);
   // Redirect to the verification form page with the phone number as a query parameter
+  // TODO: test this
   // const phoneNumber = encodeURIComponent(req.body.phone);
   res.redirect(`/verification-form.html?phone=${phoneNumber}`);
 });
 
 async function checkVerificationCode(phoneNumber, verificationCode) {
   // Format the phone number to E.164 format
-  // there has got to be a better way to do this :-/
+  // TODO: there has got to be a better way to do this :-/
   const formattedPhoneNumber = phoneNumber.replace(/\D/g, "");
   const e164PhoneNumber = formattedPhoneNumber.startsWith("1")
     ? `+${formattedPhoneNumber}`
@@ -68,7 +67,7 @@ async function checkVerificationCode(phoneNumber, verificationCode) {
 
 app.post("/submit-verification-code", async (req, res) => {
   const verificationCode = req.body["verification-code"];
-  const phoneNumber = req.query.phone; // Get the phone number from the query parameter
+  const phoneNumber = req.body["phone"];
   console.log("QS Param phone number", phoneNumber);
 
   if (!phoneNumber || !verificationCode) {
@@ -85,14 +84,6 @@ app.post("/submit-verification-code", async (req, res) => {
     res.status(400).send("Invalid verification code. Please try again.");
   }
 });
-
-// app.post("/login", (req, res) => {
-//   // Insert your authentication logic here
-//   console.log(req.body);
-//   let email = req.body.email;
-//   console.log(email);
-//   res.send(`email: ${email}`);
-// });
 
 // Wait for the client to be ready before starting the server
 ldClient.waitForInitialization().then(() => {
