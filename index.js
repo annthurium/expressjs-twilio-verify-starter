@@ -63,6 +63,23 @@ async function checkVerificationCode(phoneNumber, verificationCode) {
 }
 
 app.post("/verify", async (req, res) => {
+  // Use LaunchDarkly flag to control whether extra verification step is shown.
+  const context = {
+    kind: "user",
+    anonymous: true,
+    key: "anonymous-123", // Generate a unique key for each anonymous user
+  };
+  const extraVerification = await ldClient.variation(
+    "extra-verification-new-users",
+    context,
+    false
+  );
+  console.log("extraVerification", extraVerification);
+
+  if (extraVerification === false) {
+    return res.redirect("/success.html");
+  }
+
   const phoneNumber = req.body["phone"];
   // Use Twilio Lookup to format the phone number as E.164
   const e164PhoneNumber = await formatPhoneNumber(phoneNumber);
@@ -98,14 +115,15 @@ ldClient.waitForInitialization().then(() => {
   const server = app.listen(port, function (err) {
     if (err) console.log("Error in server setup");
     console.log(`Server listening on http://localhost:${port}`);
+  });
+});
 
-    // Evaluate a feature flag
-    // ldClient.variation("your-feature-flag-key", { key: "user-key" }, false, (err, flagValue) => {
-    //   if (err) {
-    //     console.log("Error evaluating feature flag:", err);
-    //   } else {
-    //     console.log("Feature flag value:", flagValue);
-    //   }
-    // });
+// Add the following new function to gracefully close the connection to the LaunchDarkly server.
+process.on("SIGTERM", () => {
+  debug("SIGTERM signal received: closing HTTP server");
+  ld.close();
+  server.close(() => {
+    debug("HTTP server closed");
+    ldClient.close();
   });
 });
