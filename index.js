@@ -3,13 +3,13 @@ const path = require("path");
 const serveStatic = require("serve-static");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const app = express();
 
 const twilio = require("twilio");
-const app = express();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioClient = twilio(accountSid, authToken);
+// const twilioClient = twilio(accountSid, authToken);
 const verifyServiceSid = process.env.VERIFY_SERVICE_SID;
 
 async function createSMSVerification(phoneNumber) {
