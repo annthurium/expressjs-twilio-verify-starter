@@ -6,10 +6,6 @@ const LaunchDarkly = require("@launchdarkly/node-server-sdk");
 require("dotenv").config();
 
 const twilio = require("twilio");
-const {
-  PhoneNumberContextImpl,
-} = require("twilio/lib/rest/lookups/v2/phoneNumber");
-
 const app = express();
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
