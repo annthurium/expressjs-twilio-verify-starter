@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+        <div class="signup-container">
+            <h1>Hester's Bunny Food Mart</h1>
+            <h4>🥕 Verify your phone number to finish the signup flow </h4>
+            <div class="signup-form">
+                <form action="/submit-verification-code" method="post" id="verificationForm">
+                <input type="hidden" id="phoneNumber" name="phone" />
+                <input class="form-input" name="verification-code" required="true" placeholder="Input your verification code"/>
+                <p class="login-redirect-text">Already have an account? <a href="#">Log in here.</a></p>
+                <p><button class="submit-button" type="submit" value="Submit">Submit</button></p>
+                </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const phone = urlParams.get('phone');
+                        if (phone) {
+                            document.getElementById('phoneNumber').value = phone;
+                        }
+                        const form = document.getElementById('verificationForm');
+                        form.action = `/submit-verification-code?phone=${encodeURIComponent(phone)}`;
+                    });
+                </script>
+            </form>
+            </div>
+        </div>
+    </body>
