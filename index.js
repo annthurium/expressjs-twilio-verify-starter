@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const serveStatic = require("serve-static");
 const bodyParser = require("body-parser");
-const LaunchDarkly = require("@launchdarkly/node-server-sdk");
 require("dotenv").config();
 
 const twilio = require("twilio");
@@ -26,8 +25,6 @@ async function createSMSVerification(phoneNumber) {
 
 app.use(serveStatic(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
-
-const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
 
 async function formatPhoneNumber(phoneNumber) {
   try {
@@ -59,23 +56,6 @@ async function checkVerificationCode(phoneNumber, verificationCode) {
 }
 
 app.post("/verify", async (req, res) => {
-  // Use LaunchDarkly flag to control whether extra verification step is shown.
-  const context = {
-    kind: "user",
-    anonymous: true,
-    key: "anonymous-123", // Generate a unique key for each anonymous user
-  };
-  const extraVerification = await ldClient.variation(
-    "extra-verification-new-users",
-    context,
-    false
-  );
-  console.log("extraVerification", extraVerification);
-
-  if (extraVerification === false) {
-    return res.redirect("/success.html");
-  }
-
   const phoneNumber = req.body["phone"];
   // Use Twilio Lookup to format the phone number as E.164
   const e164PhoneNumber = await formatPhoneNumber(phoneNumber);
@@ -105,21 +85,8 @@ app.post("/submit-verification-code", async (req, res) => {
   }
 });
 
-// Wait for the client to be ready before starting the server
-ldClient.waitForInitialization().then(() => {
-  const port = 3000;
-  const server = app.listen(port, function (err) {
-    if (err) console.log("Error in server setup");
-    console.log(`Server listening on http://localhost:${port}`);
-  });
-});
-
-// Add the following new function to gracefully close the connection to the LaunchDarkly server.
-process.on("SIGTERM", () => {
-  debug("SIGTERM signal received: closing HTTP server");
-  ld.close();
-  server.close(() => {
-    debug("HTTP server closed");
-    ldClient.close();
-  });
+const port = 3000;
+const server = app.listen(port, function (err) {
+  if (err) console.log("Error in server setup");
+  console.log(`Server listening on http://localhost:${port}`);
 });
