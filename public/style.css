@@ -39,6 +39,7 @@ form {
 .signup-container h1 {
     background: linear-gradient(30deg, blue, red);
     -webkit-background-clip:text;
+    background-clip: text;
     color: transparent;
     font-weight: 800;
     font-family: inherit;
