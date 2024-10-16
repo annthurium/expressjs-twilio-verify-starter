@@ -16,6 +16,8 @@
                 </form>
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
+                        // pass the phone number through as a query string param
+                        // so the user doesn't have to re-enter it
                         const urlParams = new URLSearchParams(window.location.search);
                         const phone = urlParams.get('phone');
                         if (phone) {

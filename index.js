@@ -33,27 +33,24 @@ app.get("/", (req, res) => {
 
 const ldClient = LaunchDarkly.init(process.env.LAUNCHDARKLY_SDK_KEY);
 
-app.post("/verify", async (req, res) => {
-  const phoneNumber = req.body["phone"];
-  await createSMSVerification(phoneNumber);
-  // Redirect to the verification form page with the phone number as a query parameter
-  // TODO: test this
-  // const phoneNumber = encodeURIComponent(req.body.phone);
-  res.redirect(`/verification-form.html?phone=${phoneNumber}`);
-});
+async function formatPhoneNumber(phoneNumber) {
+  try {
+    const lookup = await twilioClient.lookups.v2
+      .phoneNumbers(phoneNumber)
+      .fetch();
+    return lookup.phoneNumber;
+  } catch (error) {
+    console.error("Error formatting phone number:", error);
+    return phoneNumber; // Return original number if lookup fails
+  }
+}
 
 async function checkVerificationCode(phoneNumber, verificationCode) {
-  // Format the phone number to E.164 format
-  // TODO: there has got to be a better way to do this :-/
-  const formattedPhoneNumber = phoneNumber.replace(/\D/g, "");
-  const e164PhoneNumber = formattedPhoneNumber.startsWith("1")
-    ? `+${formattedPhoneNumber}`
-    : `+1${formattedPhoneNumber}`;
   try {
     const verificationCheck = await twilioClient.verify.v2
       .services(verifyServiceSid)
       .verificationChecks.create({
-        to: e164PhoneNumber,
+        to: phoneNumber,
         code: verificationCode,
       });
 
@@ -65,10 +62,20 @@ async function checkVerificationCode(phoneNumber, verificationCode) {
   }
 }
 
+app.post("/verify", async (req, res) => {
+  const phoneNumber = req.body["phone"];
+  // Use Twilio Lookup to format the phone number as E.164
+  const e164PhoneNumber = await formatPhoneNumber(phoneNumber);
+  await createSMSVerification(e164PhoneNumber);
+  // Redirect to the verification form page with the phone number as a query parameter
+  // so the user doesn't have to re-enter it
+  const encodedPhoneNumber = encodeURIComponent(e164PhoneNumber);
+  res.redirect(`/verification-form.html?phone=${encodedPhoneNumber}`);
+});
+
 app.post("/submit-verification-code", async (req, res) => {
   const verificationCode = req.body["verification-code"];
   const phoneNumber = req.body["phone"];
-  console.log("QS Param phone number", phoneNumber);
 
   if (!phoneNumber || !verificationCode) {
     return res
