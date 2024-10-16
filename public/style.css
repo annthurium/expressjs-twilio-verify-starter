@@ -91,3 +91,7 @@ form {
     background: linear-gradient(30deg, blue, red);
     color: white;
 }
+
+.next-steps-container {
+    padding: 10px;
+}
